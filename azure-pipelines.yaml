@@ -38,7 +38,7 @@ stages:
               testResultsFormat: 'JUnit'
               testResultsFiles: '**/surefire-reports/*.xml'
 
-  - stage: Quality-Security
+  - stage: Quality_Security
     displayName: 'Quality & Security'
     jobs:
       - job: CheckStyleWithSpotless
