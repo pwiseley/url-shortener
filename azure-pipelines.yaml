@@ -1,0 +1,121 @@
+# -> CI/CD + DevSecOps Pipeline
+
+trigger:
+  - "*"
+
+pr:
+  - "*"
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildApp
+        displayName: 'Build'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'backend/pom.xml'
+              goals: 'package'
+              options: '-DskipTests'
+
+  - stage: Test
+    jobs:
+      - job: RunUnitTests
+        displayName: 'Unit tests'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'backend/pom.xml'
+              goals: 'test'
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/surefire-reports/*.xml'
+
+  - stage: Quality-Security
+    displayName: 'Quality & Security'
+    jobs:
+      - job: CheckStyleWithSpotless
+        displayName: 'Check Style'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'backend/pom.xml'
+              goals: 'spotless:check'
+      - job: CheckCodeQualityWithSonarCloud
+        displayName: 'Check Code Quality'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'backend/pom.xml'
+              goals: 'sonar:sonar'
+              options: '-Dsonar.token=$(SONAR_TOKEN)'
+      - job: CheckDependenciesSecurityWithSnyk
+        displayName: 'Check Dependencies'
+        steps:
+          - script: |
+              npm install -g snyk
+              snyk auth $(SNYK_TOKEN)
+              snyk test --file=backend/pom.xml
+
+  - stage: Push
+    condition: | 
+      and(
+        succeeded(),
+        or(
+          eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+          startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+        )
+      )
+    jobs:
+      - job: PushToACR
+        displayName: 'Push To ACR'
+        steps:
+          - task: Docker@2
+            inputs:
+              command: 'buildAndPush'
+              repository: 'url-shortener'
+              dockerfile: './backend/Dockerfile'
+              containerRegistry: 'shortitacr'
+              tags: |
+                $(Build.SourceVersion)
+                $(Build.SourceBranchName)
+                latest
+      - job: ScanImageWithTrivy
+        displayName: 'Scan Image'
+        dependsOn: PushToACR
+        steps:
+          - script: |
+              docker login shortitacr.azurecr.io -u $(ACR_USERNAME) -p $(ACR_PASSWORD)
+              curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+              trivy image shortitacr.azurecr.io/url-shortener:latest
+
+  - stage: Deploy
+    condition: |
+      and(
+        succeeded(),
+        or(
+          eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+          startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+        )
+      )
+    jobs:
+      - job: DeployToAzure
+        displayName: 'Deploy To Azure'
+        steps:
+          - task: AzureContainerApps@1
+            inputs:
+              azureSubscription: '$(AZURE_SUBSCRIPTION)'
+              containerAppName: 'shortit-app'
+              resourceGroup: 'url-shortener-rg'
+              imageToDeploy: 'shortitacr.azurecr.io/url-shortener:$(Build.SourceVersion)'
+
+                
+
+
+
+
+
