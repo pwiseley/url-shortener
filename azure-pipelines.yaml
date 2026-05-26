@@ -18,11 +18,7 @@ stages:
       - job: BuildApp
         displayName: 'Build'
         steps:
-          - task: JavaToolInstaller@0
-            inputs:
-              versionSpec: '21'
-              jdkArchitectureOption: 'x64'
-              jdkSourceOption: 'PreInstalled'
+          - template: templates/java-setup.yaml
           - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
@@ -34,6 +30,7 @@ stages:
       - job: RunUnitTests
         displayName: 'Unit tests'
         steps:
+          - template: templates/java-setup.yaml
           - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
@@ -49,6 +46,7 @@ stages:
       - job: CheckStyleWithSpotless
         displayName: 'Check Style'
         steps:
+          - template: templates/java-setup.yaml
           - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
@@ -56,6 +54,7 @@ stages:
       - job: CheckCodeQualityWithSonarCloud
         displayName: 'Check Code Quality'
         steps:
+          - template: templates/java-setup.yaml
           - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
