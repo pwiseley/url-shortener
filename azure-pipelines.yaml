@@ -23,7 +23,7 @@ stages:
               versionSpec: '21'
               jdkArchitectureOption: 'x64'
               jdkSourceOption: 'PreInstalled'
-          - task: Maven@3
+          - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
               goals: 'package'
@@ -34,7 +34,7 @@ stages:
       - job: RunUnitTests
         displayName: 'Unit tests'
         steps:
-          - task: Maven@3
+          - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
               goals: 'test'
@@ -49,14 +49,14 @@ stages:
       - job: CheckStyleWithSpotless
         displayName: 'Check Style'
         steps:
-          - task: Maven@3
+          - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
               goals: 'spotless:check'
       - job: CheckCodeQualityWithSonarCloud
         displayName: 'Check Code Quality'
         steps:
-          - task: Maven@3
+          - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
               goals: 'sonar:sonar'
