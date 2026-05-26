@@ -63,10 +63,12 @@ stages:
       - job: CheckDependenciesSecurityWithSnyk
         displayName: 'Check Dependencies'
         steps:
-          - script: |
-              npm install -g snyk
-              snyk auth $(SNYK_TOKEN)
-              snyk test --file=backend/pom.xml
+          - task: SnykSecurityScan@1
+            inputs:
+              serviceConnectionEndpoint: 'snyk-connection'
+              testType: 'app'
+              targetFile: 'backend/pom.xml'
+              failOnIssues: false
 
   - stage: Push
     condition: | 
