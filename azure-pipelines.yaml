@@ -69,6 +69,9 @@ stages:
               testType: 'app'
               targetFile: 'backend/pom.xml'
               failOnIssues: false
+              additionalArguments: '--all-projects'
+            env:
+              NODE_OPTIONS: '--max-old-space-size=4096'
 
   - stage: Push
     condition: | 
