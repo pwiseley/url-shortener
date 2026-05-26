@@ -9,6 +9,9 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - group: url-shortener-secrets
+
 stages:
   - stage: Build
     jobs:
@@ -113,7 +116,7 @@ stages:
               resourceGroup: 'url-shortener-rg'
               imageToDeploy: 'shortitacr.azurecr.io/url-shortener:$(Build.SourceVersion)'
 
-                
+
 
 
 
