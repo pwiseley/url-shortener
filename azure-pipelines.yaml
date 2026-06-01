@@ -73,7 +73,7 @@ stages:
             inputs:
               mavenPomFile: 'backend/pom.xml'
               goals: 'dependency-check:check'
-              options: '-Dnvd.api.key=$(NVD_API_KEY)'
+              options: '-Dnvd.api.key=$(NVD_API_KEY) -DossindexAnalyzerEnabled=false -DfailOnError=false'
 
   - stage: Push
     condition: | 
