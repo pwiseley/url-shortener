@@ -64,6 +64,11 @@ stages:
         displayName: 'Check Dependencies'
         steps:
           - template: templates/java-setup.yaml
+          - task: Cache@2
+            inputs:
+              key: 'owasp-db | $(Agent.OS)'
+              path: '$(Pipeline.Workspace)/.m2/repository/org/owasp'
+              cacheHitVar: 'OWASP_CACHE_HIT'
           - task: Maven@4
             inputs:
               mavenPomFile: 'backend/pom.xml'
