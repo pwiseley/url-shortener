@@ -67,7 +67,7 @@ stages:
           - task: Cache@2
             inputs:
               key: 'owasp-db | $(Agent.OS)'
-              path: '$(Pipeline.Workspace)/.m2/repository/org/owasp'
+              path: '$(HOME)/.m2/repository/org/owasp'
               cacheHitVar: 'OWASP_CACHE_HIT'
             continueOnError: true
           - task: Maven@4
