@@ -60,12 +60,14 @@ stages:
               mavenPomFile: 'backend/pom.xml'
               goals: 'sonar:sonar'
               options: '-Dsonar.token=$(SONAR_TOKEN)'
-      - job: CheckDependenciesSecurityWithSnyk
+      - job: CheckDependenciesSecurityWithOWASP
         displayName: 'Check Dependencies'
         steps:
-          - script: |
-              snyk auth $(SNYK_TOKEN)
-              snyk test --file=backend/pom.xml
+          - template: templates/java-setup.yaml
+          - task: Maven@4
+            inputs:
+              mavenPomFile: 'backend/pom.xml'
+              goals: 'dependency-check:check'
 
   - stage: Push
     condition: | 
