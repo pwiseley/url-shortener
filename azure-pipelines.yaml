@@ -63,14 +63,9 @@ stages:
       - job: CheckDependenciesSecurityWithSnyk
         displayName: 'Check Dependencies'
         steps:
-          - task: SnykSecurityScan@1
-            inputs:
-              serviceConnectionEndpoint: 'snyk-connection'
-              testType: 'app'
-              failOnIssues: false
-              monitorOnBuild: false
-            env:
-              NODE_OPTIONS: '--max-old-space-size=4096'
+          - script: |
+              snyk auth $(SNYK_TOKEN)
+              snyk test --file=backend/pom.xml
 
   - stage: Push
     condition: | 
