@@ -12,7 +12,7 @@ RUN ./mvnw package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S spring && adduser -S spring -G spring
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
 USER spring:spring
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
