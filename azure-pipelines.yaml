@@ -105,9 +105,9 @@ stages:
         dependsOn: PushToACR
         steps:
           - script: |
-              docker login shortitacr.azurecr.io -u $(ACR_USERNAME) -p $(ACR_PASSWORD)
+              docker login shortit.azurecr.io -u $(ACR_USERNAME) -p $(ACR_PASSWORD)
               curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-              trivy image shortitacr.azurecr.io/url-shortener:latest
+              trivy image shortit.azurecr.io/url-shortener:latest
 
   - stage: Deploy
     condition: |
@@ -124,9 +124,9 @@ stages:
         steps:
           - task: AzureContainerApps@1
             inputs:
-              connectedServiceNameARM: 'Azure subscription 1 (2ecb0b14-f47c-4be6-9175-8bf9559ab40c)'
+              connectedServiceNameARM: 'shortit-connection'
               containerAppName: 'shortit-app'
               resourceGroup: 'url-shortener-rg'
-              imageToDeploy: 'shortitacr.azurecr.io/url-shortener:$(Build.SourceVersion)'
-              containerAppEnvironment: 'managedEnvironment-urlshortenerrg-b499'
+              imageToDeploy: 'shortit.azurecr.io/url-shortener:$(Build.SourceVersion)'
+              containerAppEnvironment: 'managedEnvironment-urlshortenerrg-8850'
 
