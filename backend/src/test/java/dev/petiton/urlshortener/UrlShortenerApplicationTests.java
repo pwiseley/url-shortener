@@ -1,4 +1,4 @@
-package dev.petiton.url_shortener;
+package dev.petiton.urlshortener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
