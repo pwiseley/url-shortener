@@ -13,9 +13,8 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 RUN ./mvnw package -DskipTests
 
-ARG JAR_FILE=target/*.jar
+COPY target/*.jar app.jar
 USER spring:spring
-COPY ${JAR_FILE} app.jar
 
 EXPOSE 8080
 
