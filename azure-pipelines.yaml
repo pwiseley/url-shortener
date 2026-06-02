@@ -94,6 +94,7 @@ stages:
               command: 'buildAndPush'
               repository: 'url-shortener'
               dockerfile: './backend/Dockerfile'
+              buildContext: './backend'
               containerRegistry: 'shortitacr'
               tags: |
                 $(Build.SourceVersion)
