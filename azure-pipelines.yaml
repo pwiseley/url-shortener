@@ -124,8 +124,7 @@ stages:
         steps:
           - task: AzureContainerApps@1
             inputs:
-              azureSubscription: '$(AZURE_SUBSCRIPTION)'
-              containerAppName: 'shortit-app'
-              resourceGroup: 'url-shortener-rg'
-              imageToDeploy: 'shortitacr.azurecr.io/url-shortener:$(Build.SourceVersion)'
-
+              connectedServiceNameARM: '$(AZURE_SERVICE_CONNECTION)'
+              containerAppName: '$(CONTAINER_APP_NAME)'
+              resourceGroup: '$(RESOURCE_GROUP)'
+              imageToDeploy: '$(ACR_NAME)/url-shortener:$(Build.SourceVersion)'
