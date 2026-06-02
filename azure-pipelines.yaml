@@ -95,7 +95,7 @@ stages:
               repository: 'url-shortener'
               dockerfile: './backend/Dockerfile'
               buildContext: './backend'
-              containerRegistry: 'shortitacr'
+              containerRegistry: 'shortit'
               tags: |
                 $(Build.SourceVersion)
                 $(Build.SourceBranchName)
