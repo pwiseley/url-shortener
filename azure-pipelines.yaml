@@ -128,5 +128,5 @@ stages:
               containerAppName: 'shortit-app'
               resourceGroup: 'url-shortener-rg'
               imageToDeploy: 'shortitacr.azurecr.io/url-shortener:$(Build.SourceVersion)'
-              containerAppEnvironment: '$(CONTAINER_APP_ENV)'
+              containerAppEnvironment: 'managedEnvironment-urlshortenerrg-b499'
 
