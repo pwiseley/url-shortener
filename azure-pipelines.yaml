@@ -124,7 +124,7 @@ stages:
         steps:
           - task: AzureContainerApps@1
             inputs:
-              connectedServiceNameARM: '$(AZURE_SERVICE_CONNECTION)'
+              connectedServiceNameARM: 'Azure subscription 1 (2ecb0b14-f47c-4be6-9175-8bf9559ab40c)'
               containerAppName: '$(CONTAINER_APP_NAME)'
               resourceGroup: '$(RESOURCE_GROUP)'
               imageToDeploy: '$(ACR_NAME)/url-shortener:$(Build.SourceVersion)'
