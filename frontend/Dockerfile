@@ -7,6 +7,8 @@ RUN npm run build
 
 FROM nginx:alpine AS runner
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
+COPY --chown=nginx:nginx --from=builder /app/dist/frontend/browser /usr/share/nginx/html
+USER nginx
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-c", "/etc/nginx/nginx.conf"]
+CMD ["-g", "daemon off;"]
