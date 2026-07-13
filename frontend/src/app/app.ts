@@ -15,6 +15,9 @@ export class App {
 
   longUrl = signal('');
   result = signal<UrlResponse | null>(null);
+  loading = signal(false);
+  error = signal<string | null>(null);
+  copied = signal(false);
 
   get longUrlValue(): string {
     return this.longUrl();
@@ -22,12 +25,13 @@ export class App {
   set longUrlValue(value: string) {
     this.longUrl.set(value);
   }
-  loading = signal(false);
-  error = signal<string | null>(null);
-  copied = signal(false);
 
   readonly githubUrl = 'https://github.com/pwiseley/url-shortener';
   readonly docsUrl = '/swagger-ui.html';
+
+  displayUrl(shortUrl: string): string {
+    return shortUrl.replace(/^https?:\/\//, '');
+  }
 
   shorten(): void {
     const url = this.longUrl().trim();

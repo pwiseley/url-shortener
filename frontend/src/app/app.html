@@ -39,7 +39,7 @@
     @if (result()) {
     <div class="result-box mt-4 d-flex align-items-center justify-content-between">
       <a [href]="result()!.shortUrl" target="_blank" rel="noreferrer" class="short-link">
-        {{ result()!.shortUrl }}
+        {{ displayUrl(result()!.shortUrl) }}
       </a>
       <button class="btn-copy" (click)="copyToClipboard()" [title]="copied() ? 'Copied' : 'Copy'">
         @if (copied()) {
