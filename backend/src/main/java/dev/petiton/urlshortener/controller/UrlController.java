@@ -29,12 +29,4 @@ public class UrlController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(body);
   }
-
-  @GetMapping("/{shortCode}")
-  public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
-    Url url = urlService.resolve(shortCode);
-    return ResponseEntity.status(HttpStatus.FOUND)
-        .location(URI.create(url.getOriginalUrl()))
-        .build();
-  }
 }
